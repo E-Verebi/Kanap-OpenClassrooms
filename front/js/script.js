@@ -2,11 +2,7 @@ fetch('http://localhost:3000/api/products')
     .then((response) => response.json())
     .then((data) => {
         console.log (data)
-/*La boucle répète jusqu'à ce qu'il n'y ait plus de data[i] dans l'API, son typeof sera donc "undefined" et la boucle se brisera*/
-        for (var i = 0;; i++) {
-            if (typeof data[i] === "undefined") break
-            displayProduct(data[i])
-        }
+        data.forEach(displayProduct);
     });
 
 /*La fonction displayProduct récupère en argument les données d'un produit (récupéré sur l'API grâce à fetch) pour les ajouter à la section "items" de la page d'accueil*/    
