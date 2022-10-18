@@ -37,14 +37,12 @@ function addProductToCart() {
         color: document.getElementById("colors").value,
         quantity: document.getElementById("quantity").value,
     }
-    console.log(typeof productToAdd.quantity)
     if (productToAdd.color == "" || productToAdd.quantity == "0") { alert("Sélection invalide") } else {
         const existingProduct = cart.find(element => element.id == urlId && element.color == document.getElementById("colors").value)
         if (existingProduct !== undefined) {
             existingProduct.quantity = Number(existingProduct.quantity) + Number(productToAdd.quantity)   
             localStorage.setItem("cartKey", JSON.stringify(cart))
         } else {
-            console.log("objet absent")
             cart.push(productToAdd)
             localStorage.setItem("cartKey", JSON.stringify(cart))
         }
