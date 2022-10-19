@@ -1,9 +1,14 @@
-fetch('http://localhost:3000/api/products')
-    .then((response) => response.json())
-    .then((data) => {
-        console.log(data)
-        data.forEach(displayProduct);
-    });
+async function getProducts() {
+    const response = await fetch('http://localhost:3000/api/products');
+    const jsonData = await response.json();
+    return jsonData;
+}
+let apiProducts = []
+
+window.onload = async function () {
+    apiProducts = await getProducts();
+    apiProducts.forEach(displayProduct);
+}
 
 /*La fonction displayProduct récupère en argument les données d'un produit (récupéré sur l'API grâce à fetch) pour les ajouter à la section "items" de la page d'accueil*/
 function displayProduct(product) {

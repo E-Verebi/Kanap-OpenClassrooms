@@ -1,6 +1,6 @@
 window.onload = function () {
     let cartButton = document.getElementById("addToCart")
-    cartButton.onclick = addProductToCart
+    cartButton.onclick = addProductToCart;
 }
 
 let urlId = new URLSearchParams(window.location.search).get('id')
@@ -40,7 +40,7 @@ function addProductToCart() {
     if (productToAdd.color == "" || productToAdd.quantity == "0") { alert("Sélection invalide") } else {
         const existingProduct = cart.find(element => element.id == urlId && element.color == document.getElementById("colors").value)
         if (existingProduct !== undefined) {
-            existingProduct.quantity = Number(existingProduct.quantity) + Number(productToAdd.quantity)   
+            existingProduct.quantity = String(Number(existingProduct.quantity) + Number(productToAdd.quantity))
             localStorage.setItem("cartKey", JSON.stringify(cart))
         } else {
             cart.push(productToAdd)
