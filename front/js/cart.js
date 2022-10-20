@@ -15,6 +15,29 @@ window.onload = async function () {
   changingQuantity();
   addPriceAndArticleToTotal()
   changePriceAndArticleInTotal()
+  deleteItemFromLocalStorage()
+}
+
+function deleteItemFromLocalStorage() {
+  let deleteButtons = document.getElementsByClassName('deleteItem');
+  const arrElement2 = Array.from(deleteButtons)
+  console.log(arrElement2)
+  arrElement2.forEach(element => {
+    element.addEventListener('click', function (event) {
+      let correctArticle = element.closest('article')
+      let correctId = correctArticle.getAttribute("data-id")
+      let correctColor = correctArticle.getAttribute("data-color")
+      let cart = getCart()
+      let correctObject = cart.find(element => element.id == correctId && element.color == correctColor)
+      let indexOfCorrectObject = cart.indexOf(correctObject)
+      cart.splice(indexOfCorrectObject, 1)
+      localStorage.setItem("cartKey", JSON.stringify(cart))
+      correctArticle.remove()
+      totalArticles = 0
+      totalPrice = 0
+      addPriceAndArticleToTotal()
+    })
+  })
 }
 
 function addPriceAndArticleToTotal() {
@@ -66,7 +89,7 @@ function changingQuantity() {
       lastParagraphOfDiv.innerHTML = replacement
     })
   })
-  
+
 }
 
 function displayProductsInCart(product) {
