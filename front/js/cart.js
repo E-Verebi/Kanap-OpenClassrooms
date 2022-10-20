@@ -1,51 +1,84 @@
 async function getProducts() {
-    const response = await fetch('http://localhost:3000/api/products');
-    const jsonData = await response.json();
-    return jsonData;
+  const response = await fetch('http://localhost:3000/api/products');
+  const jsonData = await response.json();
+  return jsonData;
 }
 
 let apiProducts = []
+let totalArticles = 0
+let totalPrice = 0
 
-window.onload = async function displayCart() {
-    apiProducts = await getProducts()
-    const cart = getCart()
-    cart.forEach(displayProductsInCart)
-    changingQuantity();
+window.onload = async function () {
+  apiProducts = await getProducts()
+  const cart = getCart()
+  cart.forEach(displayProductsInCart)
+  changingQuantity();
+  addPriceAndArticleToTotal()
+  changePriceAndArticleInTotal()
+}
+
+function addPriceAndArticleToTotal() {
+  const cart = getCart()
+  cart.forEach(element => totalArticles += Number(element.quantity));
+  cart.forEach(element => getTotalPrice(element))
+  document.getElementById("totalQuantity").innerHTML = totalArticles
+  document.getElementById("totalPrice").innerHTML = totalPrice
+}
+
+function changePriceAndArticleInTotal() {
+  let inputs = document.getElementsByClassName('itemQuantity');
+  const arrElement = Array.from(inputs)
+  arrElement.forEach(element => {
+    element.addEventListener('change', function () {
+      totalArticles = 0
+      totalPrice = 0
+      addPriceAndArticleToTotal()
+    })
+  })
+}
+
+function getTotalPrice(product) {
+  let id = product.id
+  let quantity = product.quantity
+  let correctProductInApi = apiProducts.find(element => element._id == id)
+  var price = Number(correctProductInApi.price) * Number(quantity)
+  totalPrice += price
 }
 
 function changingQuantity() {
-    let inputs = document.getElementsByClassName('itemQuantity');
-    const arrElement = Array.from(inputs)
-    console.log(arrElement)
-    arrElement.forEach(element => {
-        element.addEventListener('change', function (event) {
-            let correctArticle = element.closest('article')
-            let correctId = correctArticle.getAttribute("data-id")
-            const cart = getCart()
-            let correctObject = cart.find(element => element.id == correctId)
-            let newQuantity = event.target.value
-            correctObject.quantity = newQuantity
-            localStorage.setItem("cartKey", JSON.stringify(cart))
-            let correctProductInApi2 = apiProducts.find(element => element._id == correctId)
-            let correctTotalPrice = String(Number(correctProductInApi2.price) * Number(newQuantity))
-            let replacement = `<p>${correctTotalPrice} € (${correctProductInApi2.price} € x ${newQuantity})</p>`
-            let lastParagraphOfDiv = correctArticle.querySelector(".cart__item__content__description").lastElementChild
-            console.log(lastParagraphOfDiv)
-            lastParagraphOfDiv.innerHTML = replacement
-        })
+  let inputs = document.getElementsByClassName('itemQuantity');
+  const arrElement = Array.from(inputs)
+  console.log(arrElement)
+  arrElement.forEach(element => {
+    element.addEventListener('change', function (event) {
+      let correctArticle = element.closest('article')
+      let correctId = correctArticle.getAttribute("data-id")
+      const cart = getCart()
+      let correctObject = cart.find(element => element.id == correctId)
+      let newQuantity = event.target.value
+      correctObject.quantity = newQuantity
+      localStorage.setItem("cartKey", JSON.stringify(cart))
+      let correctProductInApi2 = apiProducts.find(element => element._id == correctId)
+      let correctTotalPrice = String(Number(correctProductInApi2.price) * Number(newQuantity))
+      let replacement = `<p>${correctTotalPrice} € (${correctProductInApi2.price} € x ${newQuantity})</p>`
+      let lastParagraphOfDiv = correctArticle.querySelector(".cart__item__content__description").lastElementChild
+      console.log(lastParagraphOfDiv)
+      lastParagraphOfDiv.innerHTML = replacement
     })
+  })
+  
 }
 
 function displayProductsInCart(product) {
-    let id = product.id
-    let color = product.color
-    let quantity = product.quantity
-    let correctProductInApi = apiProducts.find(element => element._id == id)
-    let image = correctProductInApi.imageUrl
-    let alt = correctProductInApi.altTxt
-    let name = correctProductInApi.name
-    let price = String(Number(correctProductInApi.price) * Number(quantity))
-    let cartElement = `
+  let id = product.id
+  let color = product.color
+  let quantity = product.quantity
+  let correctProductInApi = apiProducts.find(element => element._id == id)
+  let image = correctProductInApi.imageUrl
+  let alt = correctProductInApi.altTxt
+  let name = correctProductInApi.name
+  let price = String(Number(correctProductInApi.price) * Number(quantity))
+  let cartElement = `
     <article class="cart__item" data-id="${id}" data-color="${color}">
             <div class="cart__item__img">
               <img src="${image}" alt="${alt}">
@@ -67,9 +100,9 @@ function displayProductsInCart(product) {
               </div>
             </div>
           </article> `
-    document.getElementById("cart__items").innerHTML += cartElement
+  document.getElementById("cart__items").innerHTML += cartElement
 }
 
 function getCart() {
-    return JSON.parse(localStorage.getItem("cartKey"))
+  return JSON.parse(localStorage.getItem("cartKey"))
 }
