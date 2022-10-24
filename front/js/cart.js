@@ -1,3 +1,4 @@
+/*La fonction getProducts retourne le contenu de l’API sous forme de tableau, ce tableau contient tous les produits disponibles sous formes d’objets.*/
 async function getProducts() {
   const response = await fetch('http://localhost:3000/api/products')
     .catch(err => {
@@ -21,6 +22,7 @@ window.onload = async function () {
   deleteItemFromLocalStorage()
 }
 
+/*La fonction deleteItemFromLocalStorage permet de supprimer l’objet correspondant au produit du localStorage, supprime son élément dans le DOM pour le rendre inaccessible à l’utilisateur, et met à jour le total des prix et articles*/
 function deleteItemFromLocalStorage() {
   let deleteButtons = document.getElementsByClassName('deleteItem');
   const arrElement2 = Array.from(deleteButtons)
@@ -43,6 +45,7 @@ function deleteItemFromLocalStorage() {
   })
 }
 
+/*La fonction addPriceAndArticleToTotal récupère le contenu du panier et ajoute aux variables déclarées au préalable à 0 (totalArticles et totalPrice) les prix et quantités correspondants*/
 function addPriceAndArticleToTotal() {
   const cart = getCart()
   cart.forEach(element => totalArticles += Number(element.quantity));
@@ -51,6 +54,7 @@ function addPriceAndArticleToTotal() {
   document.getElementById("totalPrice").innerHTML = totalPrice
 }
 
+/*La fonction changePriceAndArticleInTotal est en écoute sur les inputs de changement de quantité, lors d’un changement, les variables totalArticles et totalPrice sont remises à 0 et un nouveau calcul du contenu du panier est effectué grâce à addPriceAndArticleToTotal*/
 function changePriceAndArticleInTotal() {
   let inputs = document.getElementsByClassName('itemQuantity');
   const arrElement = Array.from(inputs)
@@ -63,6 +67,7 @@ function changePriceAndArticleInTotal() {
   })
 }
 
+/*Pour le produit concerné dans le panier, la fonction getTotalPrice récupère le prix total du même produit (prix unitaire * quantité) et l’ajoute à la variable totalPrice*/
 function getTotalPrice(product) {
   let id = product.id
   let quantity = product.quantity
@@ -71,6 +76,7 @@ function getTotalPrice(product) {
   totalPrice += price
 }
 
+/*La fonction changingQuantity est en écoute sur les inputs de changement de quantité, elle change le contenu du localStorage en conséquence ainsi que le prix du produit dans le panier*/
 function changingQuantity() {
   let inputs = document.getElementsByClassName('itemQuantity');
   const arrElement = Array.from(inputs)
@@ -95,6 +101,7 @@ function changingQuantity() {
 
 }
 
+/*Utilisée sur chaque produit du panier grâce à cart.forEach , la fonction displayProductsInCart permet d’ajouter du code HTML permettant l’affichage de tout le panier*/
 function displayProductsInCart(product) {
   let id = product.id
   let color = product.color
@@ -129,6 +136,7 @@ function displayProductsInCart(product) {
   document.getElementById("cart__items").innerHTML += cartElement
 }
 
+/*La fonction getCart retourne le contenu de localStorage sous forme de tableau*/
 function getCart() {
   return JSON.parse(localStorage.getItem("cartKey"))
 }

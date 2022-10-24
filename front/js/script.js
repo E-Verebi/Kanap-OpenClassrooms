@@ -1,3 +1,4 @@
+/*La fonction getProducts retourne le contenu de l’API sous forme de tableau, ce tableau contient tous les produits disponibles sous formes d’objets.*/
 async function getProducts() {
     const response = await fetch('http://localhost:3000/api/products')
         .catch(err => {
