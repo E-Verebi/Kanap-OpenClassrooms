@@ -12,6 +12,9 @@ fetch(`http://localhost:3000/api/products/${urlId}`)
         console.log(data.colors)
         displayProduct2(data)
         data.colors.forEach(displayColors)
+    })
+    .catch(err => {
+        alert("Impossible de traiter la demande, veuillez réessayer plus tard.");
     });
 
 function displayProduct2(product) {

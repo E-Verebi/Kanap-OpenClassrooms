@@ -1,5 +1,8 @@
 async function getProducts() {
-  const response = await fetch('http://localhost:3000/api/products');
+  const response = await fetch('http://localhost:3000/api/products')
+    .catch(err => {
+      alert("Impossible de traiter la demande, veuillez réessayer plus tard.");
+    });
   const jsonData = await response.json();
   return jsonData;
 }
