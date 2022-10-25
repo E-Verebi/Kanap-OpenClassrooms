@@ -13,20 +13,22 @@ let totalArticles = 0
 let totalPrice = 0
 
 window.onload = async function () {
+
   apiProducts = await getProducts()
   const cart = getCart()
+  console.log(cart)
   cart.forEach(displayProductsInCart)
   changingQuantity();
   addPriceAndArticleToTotal()
   changePriceAndArticleInTotal()
   deleteItemFromLocalStorage()
+  isTheFormValid()
 }
 
 /*La fonction deleteItemFromLocalStorage permet de supprimer l’objet correspondant au produit du localStorage, supprime son élément dans le DOM pour le rendre inaccessible à l’utilisateur, et met à jour le total des prix et articles*/
 function deleteItemFromLocalStorage() {
   let deleteButtons = document.getElementsByClassName('deleteItem');
   const arrElement2 = Array.from(deleteButtons)
-  console.log(arrElement2)
   arrElement2.forEach(element => {
     element.addEventListener('click', function (event) {
       let correctArticle = element.closest('article')
@@ -80,7 +82,6 @@ function getTotalPrice(product) {
 function changingQuantity() {
   let inputs = document.getElementsByClassName('itemQuantity');
   const arrElement = Array.from(inputs)
-  console.log(arrElement)
   arrElement.forEach(element => {
     element.addEventListener('change', function (event) {
       let correctArticle = element.closest('article')
@@ -140,3 +141,38 @@ function displayProductsInCart(product) {
 function getCart() {
   return JSON.parse(localStorage.getItem("cartKey"))
 }
+
+var contact = { "firstName": "", "lastName": "", "address": "", "city": "", "email": "" };
+console.log(contact)
+
+/*La fonction isTheFormValid regroupe les vérifications de chaque input et s'assure également que les valeurs des inputs redeviennent "" à chaque chargement de la page*/
+function isTheFormValid() {
+  document.querySelectorAll('.cart__order__form__question input').forEach(element => element.value = "")
+  isItValid("firstName", /^\D{1,}$/)
+  isItValid("lastName", /^\D{1,}$/)
+  isItValid("city", /^\D{1,}$/)
+  isItValid("address", /^(?=.*\d).{3,}$/)
+  isItValid("email", /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
+}
+
+/*La fonction isItValid prend pour les 5 inputs de la page un id et un regex, elle valide ou non les données rentrées par l'utilisateur et les ajoute à l'objet contact qui sera envoyé à l'API*/
+function isItValid(inputId, regex) {
+
+  let contactInput = document.getElementById(inputId)
+  contactInput.addEventListener('change', function (event) {
+    let inputContent = event.target.value
+    let isItValid = regex.test(inputContent)
+    let errorMsgP = document.getElementById(`${inputId}ErrorMsg`)
+    if (isItValid == true) {
+      contact[inputId] = inputContent
+      errorMsgP.innerHTML = ""
+      console.log(contact)
+    }
+    else {
+      errorMsgP.innerHTML = "Format incorrect"
+      contact[inputId] = ""
+      console.log(contact)
+    }
+  })
+}
+
