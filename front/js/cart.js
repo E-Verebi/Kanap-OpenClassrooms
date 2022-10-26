@@ -180,6 +180,7 @@ function isItValid(inputId, regex) {
   })
 }
 
+/*La fonction orderOnClick déclenche la requête POST si le panier n'est pas vide et si le formulaire est valide*/
 function orderOnClick() {
   let orderButton = document.getElementById("order")
   orderButton.addEventListener('click', function (e) {
@@ -194,6 +195,7 @@ function orderOnClick() {
   })
 }
 
+/*La fonction postRequest envoie à l'API les données de contact et les id des produits commandés regroupés en un seul objet. L'id de la commande est récupéré et intégré à l'URL de la page de confirmation*/
 function postRequest() {
   var produits = []
   cart.forEach(element => produits.push(element.id))
