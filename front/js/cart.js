@@ -23,6 +23,7 @@ window.onload = async function () {
   changePriceAndArticleInTotal()
   deleteItemFromLocalStorage()
   isTheFormValid()
+  orderOnClick()
 }
 
 /*La fonction deleteItemFromLocalStorage permet de supprimer l’objet correspondant au produit du localStorage, supprime son élément dans le DOM pour le rendre inaccessible à l’utilisateur, et met à jour le total des prix et articles*/
@@ -139,11 +140,14 @@ function displayProductsInCart(product) {
 
 /*La fonction getCart retourne le contenu de localStorage sous forme de tableau*/
 function getCart() {
-  return JSON.parse(localStorage.getItem("cartKey"))
+  if (JSON.parse(localStorage.getItem("cartKey") == null)) { return [] } else {
+    return JSON.parse(localStorage.getItem("cartKey"))
+  }
 }
 
 var contact = { "firstName": "", "lastName": "", "address": "", "city": "", "email": "" };
 console.log(contact)
+var produits = []
 
 /*La fonction isTheFormValid regroupe les vérifications de chaque input et s'assure également que les valeurs des inputs redeviennent "" à chaque chargement de la page*/
 function isTheFormValid() {
@@ -176,3 +180,37 @@ function isItValid(inputId, regex) {
   })
 }
 
+function orderOnClick() {
+  let orderButton = document.getElementById("order")
+  orderButton.addEventListener('click', function (e) {
+    e.preventDefault()
+    cart = getCart()
+    console.log(cart.length)
+    if (cart.length == 0) { alert("Panier vide !") }
+    else {
+      if (Object.values(contact).includes('')) { alert("Formulaire incomplet !") }
+      else { postRequest() }
+    }
+  })
+}
+
+function postRequest() {
+  var produits = []
+  cart.forEach(element => produits.push(element.id))
+  var toPost = {
+    contact: contact,
+    products: produits
+  }
+  
+  let config = {
+    method: "POST",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify(toPost)
+  };
+  fetch("http://localhost:3000/api/products/order", config)
+    .then(res => res.json())
+    .then(data => window.location.href = "./confirmation.html?orderId=" + data.orderId)
+    .catch(err => {
+      alert("Impossible de traiter la demande, veuillez réessayer plus tard.");
+    });
+}
