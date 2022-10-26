@@ -5,7 +5,7 @@ window.onload = async function () {
 }
 
 /*Afin de ne pas avoir à stocker localement l'id de commande, la fonction displayOrderId va chercher celui-ci dans l'URL de la page, et l'affiche à l'utilisateur*/
-function displayOrderId () {
+function displayOrderId() {
     let orderId = new URLSearchParams(window.location.search).get('orderId')
     let orderIdSpan = document.getElementById("orderId")
     orderIdSpan.innerHTML = orderId

@@ -49,11 +49,11 @@ function addProductToCart() {
         if (existingProduct !== undefined) {
             existingProduct.quantity = String(Number(existingProduct.quantity) + Number(productToAdd.quantity))
             localStorage.setItem("cartKey", JSON.stringify(cart))
-            alert ("Produit ajouté au panier !")
+            alert("Produit ajouté au panier !")
         } else {
             cart.push(productToAdd)
             localStorage.setItem("cartKey", JSON.stringify(cart))
-            alert ("Produit ajouté au panier !")
+            alert("Produit ajouté au panier !")
         }
     }
 }

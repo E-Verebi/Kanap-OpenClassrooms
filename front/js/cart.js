@@ -13,7 +13,6 @@ let totalArticles = 0
 let totalPrice = 0
 
 window.onload = async function () {
-
   apiProducts = await getProducts()
   const cart = getCart()
   console.log(cart)
@@ -161,7 +160,6 @@ function isTheFormValid() {
 
 /*La fonction isItValid prend pour les 5 inputs de la page un id et un regex, elle valide ou non les données rentrées par l'utilisateur et les ajoute à l'objet contact qui sera envoyé à l'API*/
 function isItValid(inputId, regex) {
-
   let contactInput = document.getElementById(inputId)
   contactInput.addEventListener('change', function (event) {
     let inputContent = event.target.value
@@ -203,7 +201,6 @@ function postRequest() {
     contact: contact,
     products: produits
   }
-  
   let config = {
     method: "POST",
     headers: { "Content-type": "application/json" },
