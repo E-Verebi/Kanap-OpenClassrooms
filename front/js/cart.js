@@ -86,8 +86,9 @@ function changingQuantity() {
     element.addEventListener('change', function (event) {
       let correctArticle = element.closest('article')
       let correctId = correctArticle.getAttribute("data-id")
+      let correctColor = correctArticle.getAttribute("data-color")
       const cart = getCart()
-      let correctObject = cart.find(element => element.id == correctId)
+      let correctObject = cart.find(element => element.id == correctId && element.color == correctColor)
       let newQuantity = event.target.value
       correctObject.quantity = newQuantity
       localStorage.setItem("cartKey", JSON.stringify(cart))
